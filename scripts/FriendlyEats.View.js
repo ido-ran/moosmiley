@@ -307,6 +307,11 @@ FriendlyEats.prototype.updateQuery = function(filters) {
   this.viewList(filters, query_description);
 };
 
+FriendlyEats.prototype.resetView = function(id) {
+  var mainEl = document.querySelector('main');
+  mainEl.innerHTML = '';
+}
+
 FriendlyEats.prototype.viewRestaurant = function(id) {
   var sectionHeaderEl;
   var that = this;

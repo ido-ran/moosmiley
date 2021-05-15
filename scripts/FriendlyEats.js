@@ -32,14 +32,42 @@ function FriendlyEats() { // eslint-disable-line no-redeclare
 
   firebase.firestore().enablePersistence()
     .then(function() {
-      return firebase.auth().signInAnonymously();
-    })
-    .then(function() {
-      that.initTemplates();
-      that.initRouter();
-      that.initReviewDialog();
-      that.initFilterDialog();
-    }).catch(function(err) {
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          // we have a logged-in user, starting the app
+          that.initTemplates();
+          that.initRouter();
+          that.initReviewDialog();
+          that.initFilterDialog();
+        } else {
+
+          that.resetView();
+
+          var ui = new firebaseui.auth.AuthUI(firebase.auth());
+          ui.start('#firebaseui-auth-container', {
+            signInOptions: [
+              firebase.auth.GoogleAuthProvider.PROVIDER_ID
+            ],
+            callbacks: {
+              signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+                // User successfully signed in.
+                // Return type determines whether we continue the redirect automatically
+                // or whether we leave that to developer to handle.
+                return false;
+              },
+              uiShown: function() {
+                // The widget is rendered.
+                // Hide the loader.
+                document.getElementById('loader').style.display = 'none';
+              }
+            },
+            // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+            signInFlow: 'popup',
+            // Other config options...
+          });
+        }
+      });
+  }).catch(function(err) {
       console.log(err);
     });
 }
