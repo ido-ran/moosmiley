@@ -23,6 +23,7 @@ FriendlyEats.prototype.addRestaurant = function (data) {
 FriendlyEats.prototype.getAllRestaurants = function (render) {
   const query = firebase.firestore()
     .collection('restaurants')
+    .where("owner", "==", this.user.uid)
     // .orderBy('avgRating', 'desc')
     .limit(50);
   this.getDocumentsInQuery(query, render);

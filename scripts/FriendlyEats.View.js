@@ -40,20 +40,20 @@ FriendlyEats.prototype.viewList = function(filters, filter_description) {
     hasSectionHeader: true
   });
 
-  this.replaceElement(
-    headerEl.querySelector('#section-header'),
-    this.renderTemplate('filter-display', {
-      filter_description: filter_description
-    })
-  );
+  // this.replaceElement(
+  //   headerEl.querySelector('#section-header'),
+  //   this.renderTemplate('filter-display', {
+  //     filter_description: filter_description
+  //   })
+  // );
 
   this.replaceElement(document.querySelector('.header'), headerEl);
   this.replaceElement(document.querySelector('main'), mainEl);
 
   var that = this;
-  headerEl.querySelector('#show-filters').addEventListener('click', function() {
-    that.dialogs.filter.show();
-  });
+  // headerEl.querySelector('#show-filters').addEventListener('click', function() {
+  //   that.dialogs.filter.show();
+  // });
 
   var renderResults = function(doc) {
     if (!doc) {

@@ -27,18 +27,22 @@ function FriendlyEats() { // eslint-disable-line no-redeclare
   };
 
   this.dialogs = {};
+  this.user = null;
 
   var that = this;
 
   firebase.firestore().enablePersistence()
     .then(function() {
       firebase.auth().onAuthStateChanged(function (user) {
+        that.user = user;
         if (user) {
           // we have a logged-in user, starting the app
           that.initTemplates();
           that.initRouter();
           that.initReviewDialog();
           that.initFilterDialog();
+
+          document.getElementById('loader').style.display = 'none';
         } else {
 
           that.resetView();
