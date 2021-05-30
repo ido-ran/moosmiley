@@ -30,7 +30,7 @@ FriendlyEats.prototype.getAllRestaurants = function (render) {
 };
 
 FriendlyEats.prototype.getDocumentsInQuery = function (query, render) {
-  query.onSnapshot((snapshot) => {
+  const unsubscribe = query.onSnapshot((snapshot) => {
     if (!snapshot.size) {
       return render();
     }
@@ -41,7 +41,17 @@ FriendlyEats.prototype.getDocumentsInQuery = function (query, render) {
       }
     });
   });
+
+  this.listeners.push(unsubscribe);
 };
+
+FriendlyEats.prototype.stopAllListeners = function() {
+  this.listeners.forEach((listener) => {
+    listener();
+  });
+
+  this.listeners = [];
+}
 
 FriendlyEats.prototype.getRestaurant = function (id) {
   return firebase.firestore().collection('restaurants').doc(id).get();

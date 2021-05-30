@@ -28,6 +28,8 @@ function FriendlyEats() { // eslint-disable-line no-redeclare
 
   this.dialogs = {};
   this.user = null;
+  this.authUI = null;
+  this.listeners = [];
 
   var that = this;
 
@@ -47,8 +49,10 @@ function FriendlyEats() { // eslint-disable-line no-redeclare
 
           that.resetView();
 
-          var ui = new firebaseui.auth.AuthUI(firebase.auth());
-          ui.start('#firebaseui-auth-container', {
+          if (!that.authUI) {
+            that.authUI = new firebaseui.auth.AuthUI(firebase.auth());
+          }
+          that.authUI.start('#firebaseui-auth-container', {
             signInOptions: [
               firebase.auth.GoogleAuthProvider.PROVIDER_ID
             ],
@@ -103,7 +107,7 @@ FriendlyEats.prototype.initRouter = function() {
     })
     .resolve();
 
-  firebase
+  this.listeners.push(firebase
     .firestore()
     .collection('restaurants')
     .limit(1)
@@ -111,7 +115,8 @@ FriendlyEats.prototype.initRouter = function() {
       if (snapshot.empty) {
         that.router.navigate('/setup');
       }
-    });
+    })
+  );
 };
 
 FriendlyEats.prototype.getCleanPath = function(dirtyPath) {
